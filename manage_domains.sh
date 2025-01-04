@@ -15,9 +15,15 @@ done
 
 add_domain() {
     local domain=$1
+    # Validate domain format
+    if ! echo "$domain" | grep -qP '^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$'; then
+        echo "Error: Invalid domain format: $domain"
+        exit 1
+    fi
     if ! grep -q "^$domain$" "$list_file"; then
         echo "$domain" >> "$list_file"
-        (head -n 12 "$list_file" && tail -n +13 "$list_file" | sort) > "$list_file.tmp" && mv "$list_file.tmp" "$list_file"
+        # Preserve comments at top of file
+        (grep '^#' "$list_file"; grep -v '^#' "$list_file" | sort) > "$list_file.tmp" && mv "$list_file.tmp" "$list_file"
         echo "Domain $domain added to $list_file."
     else
         echo "Domain $domain already exists in $list_file."
