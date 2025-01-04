@@ -1,7 +1,17 @@
 #!/bin/bash
 
-list_file="list"
-inactive_file="inactive"
+# Get directory where script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+list_file="${SCRIPT_DIR}/list"
+inactive_file="${SCRIPT_DIR}/inactive"
+
+# Validate files exist
+for file in "$list_file" "$inactive_file"; do
+    if [[ ! -f "$file" ]]; then
+        echo "Error: Required file $file not found"
+        exit 1
+    fi
+done
 
 add_domain() {
     local domain=$1
