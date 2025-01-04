@@ -1,9 +1,16 @@
 #!/bin/bash
 
-list_file="list"
-inactive_file="inactive"
-test_list_file="test_list"
-test_inactive_file="test_inactive"
+# Create temporary test directory
+TEST_DIR=$(mktemp -d)
+trap 'rm -rf "$TEST_DIR"' EXIT
+
+# Source files
+list_file="../list"
+inactive_file="../inactive"
+
+# Test files
+test_list_file="${TEST_DIR}/test_list"
+test_inactive_file="${TEST_DIR}/test_inactive"
 
 # Backup original files
 cp "$list_file" "$test_list_file"
